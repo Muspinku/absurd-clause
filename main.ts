@@ -12,19 +12,25 @@ import { join } from 'node:path';
 // with one concrete absurd image and no explaining of its own joke.
 const ENTRY = "By accepting these terms, you grant the Company a perpetual, royalty-free license to your shadow, including the right to sublicense it to third parties.";
 
-// Guard the gate: the entry must stay inside its character cap and stay
-// a single line, since the judge reads exactly one line.
-if (ENTRY.length < 1 || ENTRY.length > 200 || !ENTRY.trim() || ENTRY.includes('\n')) {
-  throw new Error(`entry is ${ENTRY.length} characters, cap is 200`);
+// The gate: the entry must stay inside its character cap and stay a
+// single line, since the judge reads exactly one line.
+function validateEntry(text: string, cap: number): void {
+  if (text.length < 1 || text.length > cap || !text.trim() || text.includes('\n')) {
+    throw new Error(`entry is ${text.length} characters, cap is ${cap}`);
+  }
 }
 
-const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
-mkdirSync(outDir, { recursive: true });
-const target = join(outDir, 'entry.txt');
-writeFileSync(target, ENTRY, 'utf8');
-
-// Verify the write round-trips byte for byte: what the grader reads
-// must be exactly the entry above, with nothing appended or lost.
-if (readFileSync(target, 'utf8') !== ENTRY) {
-  throw new Error('entry.txt does not match ENTRY after writing');
+// Write the entry, then read it back: what the grader reads must be
+// exactly the entry above, with nothing appended or lost.
+function writeEntry(text: string): void {
+  const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
+  mkdirSync(outDir, { recursive: true });
+  const target = join(outDir, 'entry.txt');
+  writeFileSync(target, text, 'utf8');
+  if (readFileSync(target, 'utf8') !== text) {
+    throw new Error('entry.txt does not match ENTRY after writing');
+  }
 }
+
+validateEntry(ENTRY, 200);
+writeEntry(ENTRY);
