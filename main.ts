@@ -7,10 +7,12 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
+// The entry: a terms clause quietly licensing your shadow.
 const ENTRY = "By accepting these terms, you grant the Company a perpetual, royalty-free license to your shadow, including the right to sublicense it to third parties.";
 
-// Guard the gate: the entry must stay inside its character cap.
-if (ENTRY.length < 1 || ENTRY.length > 200 || !ENTRY.trim()) {
+// Guard the gate: the entry must stay inside its character cap and stay
+// a single line, since the judge reads exactly one line.
+if (ENTRY.length < 1 || ENTRY.length > 200 || !ENTRY.trim() || ENTRY.includes('\n')) {
   throw new Error(`entry is ${ENTRY.length} characters, cap is 200`);
 }
 
