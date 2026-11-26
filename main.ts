@@ -8,6 +8,8 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 // The entry: a terms clause quietly licensing your shadow.
+// It has to read as real legal boilerplate until the absurdity hits,
+// with one concrete absurd image and no explaining of its own joke.
 const ENTRY = "By accepting these terms, you grant the Company a perpetual, royalty-free license to your shadow, including the right to sublicense it to third parties.";
 
 // Guard the gate: the entry must stay inside its character cap and stay
